@@ -3,6 +3,7 @@ import sys
 
 from flask import Flask, request, render_template, make_response, jsonify, Response
 
+from config import APP_HOST, APP_PORT
 from services import upload_binary_to_ipfs, download_binary_from_ipfs
 
 app = Flask(__name__, template_folder='templates')
@@ -45,4 +46,4 @@ def get_file(ipfs_hash):
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0')
+    app.run(host=APP_HOST, port=APP_PORT)
