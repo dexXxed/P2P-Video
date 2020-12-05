@@ -8,6 +8,7 @@ plain_text = input('pls, input message or name of file ')
 password = input('pls, input u password ')
 
 
+
 def encrypt(plain_text, password):
     with open(plain_text, "rb") as videoFile:
         text = str(base64.b64encode(videoFile.read()))
