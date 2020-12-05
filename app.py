@@ -21,11 +21,14 @@ def upload_file():
         if file.filename == '':
             return Response("no filename", status=400)
         else:
+            # TODO: get video price, description
             ipfs_hash = upload_binary_to_ipfs(file.read())
             # TODO: upload metadata using upload_json_to_ipfs method
             return jsonify({'hash': ipfs_hash})
     return render_template('upload_file.html')
 
+# TODO: create preview upload endpoint
+#  receives hash of desired video and return responce with image, price and description
 
 
 @app.route("/download-file/<ipfs_hash>", methods=['GET'])
@@ -39,7 +42,6 @@ def get_file(ipfs_hash):
     binary_object = download_binary_from_ipfs(ipfs_hash)
     # TODO: get file name from ipfs
     response = make_response(binary_object)
-    # response.headers.set('Content-Type', 'image/jpeg')  #Todo: check if something changes
     response.headers.set(
         'Content-Disposition', 'attachment', filename='%s' % ipfs_hash)
     return response
