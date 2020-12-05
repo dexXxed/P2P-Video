@@ -1,21 +1,14 @@
-## Setup
+## Run
 ```
-# install ipfs as described here https://docs.ipfs.io/install/command-line/
-wget https://dist.ipfs.io/go-ipfs/v0.6.0/go-ipfs_v0.6.0_linux-amd64.tar.gz
-tar -xvzf go-ipfs_v0.6.0_linux-amd64.tar.gz
-cd go-ipfs
-sudo bash install.sh
-
-/usr/local/bin/ipfs init
-/usr/local/bin/ipfs daemon
-
-pip install -r requirements
+cd P2P-Video
+docker-compose up --build
 ```
 
-# Run
-```
-python app.py
-```
+# Endpoints
+`http://0.0.0.0:8000/upload-file` - form to select file to upload\
+`http://0.0.0.0:8000/download-file/<ipfs_hash>` - download file from template\
+`http://0.0.0.0:8000/download-file/<ipfs_hash>` - download file directly\
+`http://0.0.0.0:5001/webui` - IPFS web GUI
 
 ipfs python api doc
 https://ipfs.io/ipns/12D3KooWEqnTdgqHnkkwarSrJjeMP2ZJiADWLYADaNvUb6SQNyPF/docs/http_client_ref.html
