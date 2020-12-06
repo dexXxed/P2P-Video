@@ -1,2 +1,4 @@
 Flask
 ipfshttpclient
+pycryptodome
+starkbank-ecdsa

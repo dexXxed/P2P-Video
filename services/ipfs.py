@@ -25,3 +25,8 @@ def download_json_from_ipfs(hash: str):
 def download_binary_from_ipfs(hash: str):
     client = ipfshttpclient.connect(IPFS_CLIENT_HOST)
     return client.block.get(hash)
+
+
+def delete_file_from_ipfs(hash: str):
+    # TODO
+    pass
