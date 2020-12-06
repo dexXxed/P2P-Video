@@ -17,9 +17,9 @@ app = Flask(__name__, template_folder='templates')
 @app.route('/upload-file', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
-        file = request.files.get(['file'], None)
-        price = request.form.get(['price'], None)
-        description = request.form.get(['description'], None)
+        file = request.files.get('file', None)
+        price = request.form.get('price', None)
+        description = request.form.get('description', None)
         binary_file = file.read()
 
         # create signature and public key for binary file
