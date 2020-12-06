@@ -558,6 +558,9 @@ li.menuclick-cnz a {
 /* slider section start */
 .slider {
 	background: #d7eaf6;
+	/* background-attachment: fixed; */
+	/* background-image: url("assets/logo.png"); */
+	background-image: url("logo.png");
 	text-align: center;
 	padding: 100px 0;
 	position: relative;
