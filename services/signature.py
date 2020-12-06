@@ -1,13 +1,13 @@
 import io
 from typing import Tuple
 
-from ellipticcurve.ecdsa import Ecdsa
-from ellipticcurve.privateKey import PrivateKey
+from ellipticcurve.ecdsa import Ecdsa, Signature
+from ellipticcurve.privateKey import PrivateKey, PublicKey
 
 import hashlib
 
 
-def generate_signature(message: str) -> Tuple[str, str]:
+def generate_signature(message: str) -> Tuple[Signature, PublicKey]:
     # Generate new Key
     private_key = PrivateKey()
     public_key = private_key.publicKey()
@@ -15,10 +15,10 @@ def generate_signature(message: str) -> Tuple[str, str]:
     # Generate Signature
     signature = Ecdsa.sign(message, private_key)
 
-    return signature.toBase64(), public_key.toString()
+    return signature, public_key  # .toBase64()  .toString()
 
 
-def verify_signature(message: str, signature: str, public_key: str) -> bool:
+def verify_signature(message: str, signature: Signature, public_key: PublicKey) -> bool:
     return Ecdsa.verify(message, signature, public_key)
 
 

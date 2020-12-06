@@ -1,3 +1,5 @@
+import pickle
+
 from flask import Flask, request, render_template, make_response, jsonify, Response
 
 from config import APP_HOST, APP_PORT
@@ -15,13 +17,14 @@ app = Flask(__name__, template_folder='templates')
 @app.route('/upload-file', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
-        try:
-            file = request.files['file']
-            price = request.form['price']
-            description = request.form['description']
-            wallet = request.form['wallet']  # or what in web3py uses?
-        except KeyError:
-            return Response("Some fields not filled", status=400) # TODO: redirect to upload-file with message or validate and not allow send request untill form is filled properly
+        file = request.files['file']
+        # try:
+        #     file = request.files['file']
+        #     price = request.form['price']
+        #     description = request.form['description']
+        #     wallet = request.form['wallet']  # or what in web3py uses?
+        # except KeyError:
+        #     return Response("Some fields not filled", status=400) # TODO: redirect to upload-file with message or validate and not allow send request untill form is filled properly
 
         binary_file = file.read()
 
@@ -29,53 +32,55 @@ def upload_file():
         signature, public_key = generate_signature(hash_binary(binary_file))
 
         # encrypt binary file using generated public key
-        encrypted_dict = encrypt(binary_file, public_key)
+        encrypted_dict = encrypt(binary_file, public_key.toString())
 
         # # upload encrypted dict to ipfs and get hash string
-        # ipfs_hash = upload_json_to_ipfs(encrypted_dict) # TODO - change back to json when fix bug with encryption
-        ipfs_hash = upload_binary_to_ipfs(binary_file)
+        ipfs_video_hash = upload_json_to_ipfs(encrypted_dict)
 
-        # create_smart_contract(wallet, # TODO: uncomment when figure out how to use smart contracts
-        #                       price,
-        #                       description,
-        #                       signature,
-        #                       public_key,
-        #                       ipfs_hash)
+        # upload credentials to ipfs in pickle format
+        ipfs_signature_hash = upload_binary_to_ipfs(pickle.dumps(obj=signature))
+        ipfs_public_key_hash = upload_binary_to_ipfs(pickle.dumps(obj=public_key))
 
-        return jsonify({'ipfs_hash': ipfs_hash,
-                        'signature': signature,
-                        'public_key': public_key})
+        return jsonify({'ipfs_video_hash': ipfs_video_hash,
+                        'ipfs_signature_hash': ipfs_signature_hash,
+                        'ipfs_public_key_hash': ipfs_public_key_hash})
     return render_template('upload_file.html')
 
 
 @app.route('/download-file', methods=['GET', 'POST'])
 def download_file():
-    if request.method == 'POST':
+    if request.method == 'GET': #"'POST':
 
         # User input ipfs_hash of video that he want to download
-        ipfs_hash = request.files['ipfs_hash']
+        # ipfs_hash = request.files['ipfs_video_hash']
+        # signature_ipfs_hash = request.files['signature_ipfs_hash']
+        # ipfs_public_key_hash = request.files['ipfs_public_key_hash']
 
-        # I dont know how smart contract works so there are my guesses # TODO: use smart contract in the right way
-        smart_contract = get_smart_contract_using_ipfs_hash(ipfs_hash)
-        smart_contract_info = execute_smart_contract_agreements(smart_contract)
+        ipfs_hash = 'QmYcQwYtFvoSXiheEkgBA3428iYFPmnfK94gButPBZPHL3'
+        signature_ipfs_hash = 'QmfHyvjsJusiP9FruAb4n5F66DC8XQsnkLsYLP288zVuy8'
+        ipfs_public_key_hash = 'QmU1sRsV84z7HPGaE68cyfT1APAJ6bCwcRuriZjydJNKwT'
+
+
 
         # # get encrypted video from ipfs
-        # encrypted_dict = download_json_from_ipfs(ipfs_hash) # TODO - change back to json when fix bug with encryption
-        binary_object = download_binary_from_ipfs(ipfs_hash)
+        encrypted_dict = download_json_from_ipfs(ipfs_hash)
+
+        signature = pickle.loads(download_binary_from_ipfs(signature_ipfs_hash))
+        public_key = pickle.loads(download_binary_from_ipfs(ipfs_public_key_hash))
 
         # # decrypt downloaded video
-        # binary_object = decrypt(encrypted_dict, smart_contract_info['public_key'])  TODO: fix bug with enctryption. Video not plays after encrypt/decrypt
+        binary_object = decrypt(encrypted_dict, public_key)
 
         # # check authenticity using signature
-        # auth = verify_signature(hash_binary(binary_object), # TODO: fix bug with convert from string to Signature
-        #                         smart_contract_info['signature'],
-        #                         smart_contract_info['public_key'])
+        auth = verify_signature(hash_binary(binary_object),
+                                signature,
+                                public_key)
 
-        # if not auth:
-        #     pass  # TODO: What to do if signature is not correct?
+        if not auth:
+            pass
 
         # get money from user account
-        pay(smart_contract_info)
+        pay()
 
         # delete video if user downloaded it
         delete_file_from_ipfs(ipfs_hash)
