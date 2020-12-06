@@ -59,7 +59,7 @@ def download_file():
         public_key = pickle.loads(download_binary_from_ipfs(ipfs_public_key_hash))
 
         # # decrypt downloaded video
-        binary_object = decrypt(encrypted_dict, public_key)
+        binary_object = decrypt(encrypted_dict, public_key.toString())
 
         # # check authenticity using signature
         auth = verify_signature(hash_binary(binary_object),
