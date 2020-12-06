@@ -7,8 +7,6 @@ from Cryptodome.Random import get_random_bytes
 plain_text = input('pls, input message or name of file ')
 password = input('pls, input u password ')
 
-
-
 def encrypt(plain_text, password):
     with open(plain_text, "rb") as videoFile:
         text = str(base64.b64encode(videoFile.read()))
@@ -26,7 +24,6 @@ def encrypt(plain_text, password):
         'tag': b64encode(tag).decode('utf-8')
     }
 
-
 def decrypt(enc_dict, password):
     salt = b64decode(enc_dict['salt'])
     cipher_text = b64decode(enc_dict['cipher_text'])
@@ -37,7 +34,6 @@ def decrypt(enc_dict, password):
     cipher = AES.new(private_key, AES.MODE_GCM, nonce=nonce)
     decrypted = cipher.decrypt_and_verify(cipher_text, tag)
     return decrypted
-
 
 dict = encrypt(plain_text, password)
 
