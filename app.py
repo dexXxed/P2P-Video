@@ -5,13 +5,15 @@ from flask import Flask, request, render_template, make_response, jsonify, Respo
 from config import APP_HOST, APP_PORT
 from services.encryption import encrypt, decrypt
 from services.ipfs import upload_binary_to_ipfs, download_binary_from_ipfs, upload_json_to_ipfs, \
-    download_json_from_ipfs, delete_file_from_ipfs
-from services.payments import pay
+    download_json_from_ipfs
 from services.signature import generate_signature, hash_binary, verify_signature
-from services.smart_contracts import create_smart_contract, execute_smart_contract_agreements, \
-    get_smart_contract_using_ipfs_hash
 
 app = Flask(__name__, template_folder='templates')
+
+
+@app.route('/')
+def home():
+    return render_template('index.html')
 
 
 @app.route('/upload-file', methods=['GET', 'POST'])
@@ -45,12 +47,12 @@ def upload_file():
 
 @app.route('/download-file', methods=['GET', 'POST'])
 def download_file():
-    if request.method == 'GET': #"'POST':
+    if request.method == 'POST':
 
         # User input ipfs_hash of video that he want to download
-        ipfs_hash = request.files.get('ipfs_video_hash', 'QmZkJvsD21KTJQqs4GsRLkc3GHZsFvH3P5TivNcpVSNHcP')
-        signature_ipfs_hash = request.files.get('signature_ipfs_hash', 'QmVzuDCk56Wvzf6PpjrNGm1Nnt9tr94qf2mdANr4yHct1y')
-        ipfs_public_key_hash = request.files.get('ipfs_public_key_hash', 'QmYPgtSYjLMmMSwLZWgwYgPvdTd1taERXdmbc5KmY9z3Ks')
+        ipfs_hash = request.files.get('ipfs_video_hash', None)
+        signature_ipfs_hash = request.files.get('signature_ipfs_hash', None)
+        ipfs_public_key_hash = request.files.get('ipfs_public_key_hash', None)
 
         # # get encrypted video from ipfs
         encrypted_dict = download_json_from_ipfs(ipfs_hash)
@@ -69,18 +71,13 @@ def download_file():
         if not auth:
             return Response("File is not valid", status=400)
 
-        # get money from user account
-        pay()
-
-        # delete video if user downloaded it
-        delete_file_from_ipfs(ipfs_hash)
-
         response = make_response(binary_object)
         response.headers.set(
             'Content-Disposition', 'attachment', filename='%s' % ipfs_hash)
         return response
     else:
         return render_template('download.html')
+
 
 
 if __name__ == "__main__":

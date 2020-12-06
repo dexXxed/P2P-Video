@@ -15,7 +15,7 @@ def generate_signature(message: str) -> Tuple[Signature, PublicKey]:
     # Generate Signature
     signature = Ecdsa.sign(message, private_key)
 
-    return signature, public_key  # .toBase64()  .toString()
+    return signature, public_key
 
 
 def verify_signature(message: str, signature: Signature, public_key: PublicKey) -> bool:

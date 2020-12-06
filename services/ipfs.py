@@ -13,7 +13,7 @@ def upload_json_to_ipfs(json_object, ipfs_client_host=IPFS_CLIENT_HOST) -> str:
 
 def upload_binary_to_ipfs(binary, ipfs_client_host=IPFS_CLIENT_HOST) -> str:
     client = ipfshttpclient.connect(ipfs_client_host)
-    result = client.block.put(io.BytesIO(binary)) # TODO: UPLOAD WITH NAME
+    result = client.block.put(io.BytesIO(binary))
     return result['Key']
 
 
@@ -25,8 +25,3 @@ def download_json_from_ipfs(hash: str, ipfs_client_host=IPFS_CLIENT_HOST):
 def download_binary_from_ipfs(hash: str, ipfs_client_host=IPFS_CLIENT_HOST):
     client = ipfshttpclient.connect(ipfs_client_host)
     return client.block.get(hash)
-
-
-def delete_file_from_ipfs(hash: str, ipfs_client_host=IPFS_CLIENT_HOST):
-    # TODO
-    pass
