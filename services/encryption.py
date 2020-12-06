@@ -32,5 +32,5 @@ def decrypt(enc_dict: Dict[str, str], password: str) -> bytes:
     private_key = hashlib.scrypt(
         password.encode(), salt=salt, n=2 ** 14, r=8, p=1, dklen=32)
     cipher = AES.new(private_key, AES.MODE_GCM, nonce=nonce)
-    decrypted = base64.b64decode(cipher.decrypt_and_verify(cipher_text, tag))
+    decrypted = cipher.decrypt_and_verify(cipher_text, tag)
     return decrypted
