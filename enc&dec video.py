@@ -39,9 +39,9 @@ def decrypt(enc_dict, password):
     return decrypted
 
 
-dick = encrypt(plain_text, password)
+dict = encrypt(plain_text, password)
 
-decrypt_text = decrypt(dick, password)
+decrypt_text = decrypt(dict, password) 
 
 fh = open("new video.mp4", "wb")
 fh.write(base64.b64decode(decrypt_text[2:])) #changed
