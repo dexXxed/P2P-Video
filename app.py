@@ -48,9 +48,9 @@ def download_file():
     if request.method == 'GET': #"'POST':
 
         # User input ipfs_hash of video that he want to download
-        ipfs_hash = request.files.get('ipfs_video_hash', 'QmYcQwYtFvoSXiheEkgBA3428iYFPmnfK94gButPBZPHL3')
-        signature_ipfs_hash = request.files.get('signature_ipfs_hash', 'QmfHyvjsJusiP9FruAb4n5F66DC8XQsnkLsYLP288zVuy8')
-        ipfs_public_key_hash = request.files.get('ipfs_public_key_hash', 'QmU1sRsV84z7HPGaE68cyfT1APAJ6bCwcRuriZjydJNKwT')
+        ipfs_hash = request.files.get('ipfs_video_hash', '')
+        signature_ipfs_hash = request.files.get('signature_ipfs_hash', '')
+        ipfs_public_key_hash = request.files.get('ipfs_public_key_hash', '')
 
         # # get encrypted video from ipfs
         encrypted_dict = download_json_from_ipfs(ipfs_hash)
