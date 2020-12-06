@@ -44,5 +44,5 @@ dick = encrypt(plain_text, password)
 decrypt_text = decrypt(dick, password)
 
 fh = open("new video.mp4", "wb")
-fh.write(base64.b64decode(decrypt_text))
+fh.write(base64.b64decode(decrypt_text[2:])) #changed
 fh.close()
