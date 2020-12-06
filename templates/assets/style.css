@@ -125,20 +125,51 @@ button:focus,input:focus,input:active{
 	width: 350px;
 }
 
+.submit {
+	margin-top: 1em;
+	/* width: auto; */
+	width: 180px;
+	/* width: 350px; */
+}
+
 .inputfile + label:hover {
 	background: #000;
 	color: #fff;
+	opacity: 0.6;
 }
 
 .submit:hover {
 	background: #000;
 	color: #fff;
+	opacity: 0.6;
 }
 
 iframe , textarea {
     width: 100%;
     border: none;
 }
+
+/* #txtinputs {
+	background-color: yellow;
+} */
+
+#price {
+	width: 13em;
+}
+
+#descr {
+	width: 25em;
+	box-sizing: border-box;
+	height: 6.5em;
+	margin-bottom: 1em;
+}
+
+.inpfield {
+	background-color: white;
+	padding: 0.1em 0.5em;
+	/* height: 2.1em; */
+}
+
 .mt-20 {
 	margin-top: 20px;
 }
@@ -161,6 +192,7 @@ iframe , textarea {
 .one-btn:hover {
 	background: #000;
 	color: #fff;
+	opacity: 0.6;
 }
 .one-btn.one-btn-del {
 	background: #000;
@@ -169,9 +201,8 @@ iframe , textarea {
 .one-btn.one-btn-del:hover {
 	background: transparent;
 	color: #000;
+	opacity: 0.6;
 }
-
-
 
 .display-table {
     display: table;
@@ -528,7 +559,7 @@ li.menuclick-cnz a {
 .slider {
 	background: #d7eaf6;
 	text-align: center;
-	padding: 200px 0;
+	padding: 100px 0;
 	position: relative;
 	color: #4b5860;
 }
@@ -618,7 +649,6 @@ li.menuclick-cnz a {
     width: auto;
 }
 .portfolio-item {
-    background: url(../images/portfolio-bg.png) no-repeat top left / cover;
     margin: 30px auto 9px;
     max-width: 900px;
     box-shadow: 0 0 15px 0 #ccc;
