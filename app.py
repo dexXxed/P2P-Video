@@ -17,15 +17,9 @@ app = Flask(__name__, template_folder='templates')
 @app.route('/upload-file', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
-        file = request.files['file']
-        # try:
-        #     file = request.files['file']
-        #     price = request.form['price']
-        #     description = request.form['description']
-        #     wallet = request.form['wallet']  # or what in web3py uses?
-        # except KeyError:
-        #     return Response("Some fields not filled", status=400) # TODO: redirect to upload-file with message or validate and not allow send request untill form is filled properly
-
+        file = request.files.get(['file'], None)
+        price = request.form.get(['price'], None)
+        description = request.form.get(['description'], None)
         binary_file = file.read()
 
         # create signature and public key for binary file
@@ -43,7 +37,9 @@ def upload_file():
 
         return jsonify({'ipfs_video_hash': ipfs_video_hash,
                         'ipfs_signature_hash': ipfs_signature_hash,
-                        'ipfs_public_key_hash': ipfs_public_key_hash})
+                        'ipfs_public_key_hash': ipfs_public_key_hash,
+                        'price': price,
+                        'description': description})
     return render_template('upload_file.html')
 
 
@@ -52,15 +48,9 @@ def download_file():
     if request.method == 'GET': #"'POST':
 
         # User input ipfs_hash of video that he want to download
-        # ipfs_hash = request.files['ipfs_video_hash']
-        # signature_ipfs_hash = request.files['signature_ipfs_hash']
-        # ipfs_public_key_hash = request.files['ipfs_public_key_hash']
-
-        ipfs_hash = 'QmYcQwYtFvoSXiheEkgBA3428iYFPmnfK94gButPBZPHL3'
-        signature_ipfs_hash = 'QmfHyvjsJusiP9FruAb4n5F66DC8XQsnkLsYLP288zVuy8'
-        ipfs_public_key_hash = 'QmU1sRsV84z7HPGaE68cyfT1APAJ6bCwcRuriZjydJNKwT'
-
-
+        ipfs_hash = request.files.get('ipfs_video_hash', 'QmYcQwYtFvoSXiheEkgBA3428iYFPmnfK94gButPBZPHL3')
+        signature_ipfs_hash = request.files.get('signature_ipfs_hash', 'QmfHyvjsJusiP9FruAb4n5F66DC8XQsnkLsYLP288zVuy8')
+        ipfs_public_key_hash = request.files.get('ipfs_public_key_hash', 'QmU1sRsV84z7HPGaE68cyfT1APAJ6bCwcRuriZjydJNKwT')
 
         # # get encrypted video from ipfs
         encrypted_dict = download_json_from_ipfs(ipfs_hash)
@@ -77,7 +67,7 @@ def download_file():
                                 public_key)
 
         if not auth:
-            pass
+            return Response("File is not valid", status=400)
 
         # get money from user account
         pay()
