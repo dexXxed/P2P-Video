@@ -560,11 +560,14 @@ li.menuclick-cnz a {
 	background: #d7eaf6;
 	/* background-attachment: fixed; */
 	/* background-image: url("assets/logo.png"); */
-	background-image: url("logo.png");
+	/* background-image: url("logo2.png"); */
+	/* background-blend-mode: color-burn; */
 	text-align: center;
 	padding: 100px 0;
 	position: relative;
 	color: #4b5860;
+	background-repeat: no-repeat;
+	background-position: 100px 100px;
 }
 .single-slide {
 	max-width: 650px;
