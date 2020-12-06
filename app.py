@@ -31,17 +31,20 @@ def upload_file():
         # encrypt binary file using generated public key
         encrypted_dict = encrypt(binary_file, public_key)
 
-        # upload encrypted dict to ipfs and get hash string
-        ipfs_hash = upload_json_to_ipfs(encrypted_dict)
+        # # upload encrypted dict to ipfs and get hash string
+        # ipfs_hash = upload_json_to_ipfs(encrypted_dict) # TODO - change back to json when fix bug with encryption
+        ipfs_hash = upload_binary_to_ipfs(binary_file)
 
-        create_smart_contract(wallet,
-                              price,
-                              description,
-                              signature,
-                              public_key,
-                              ipfs_hash)
+        # create_smart_contract(wallet, # TODO: uncomment when figure out how to use smart contracts
+        #                       price,
+        #                       description,
+        #                       signature,
+        #                       public_key,
+        #                       ipfs_hash)
 
-        return jsonify({'hash': ipfs_hash})
+        return jsonify({'ipfs_hash': ipfs_hash,
+                        'signature': signature,
+                        'public_key': public_key})
     return render_template('upload_file.html')
 
 
@@ -56,19 +59,20 @@ def download_file():
         smart_contract = get_smart_contract_using_ipfs_hash(ipfs_hash)
         smart_contract_info = execute_smart_contract_agreements(smart_contract)
 
-        # get encrypted video from ipfs
-        encrypted_dict = download_json_from_ipfs(ipfs_hash)
+        # # get encrypted video from ipfs
+        # encrypted_dict = download_json_from_ipfs(ipfs_hash) # TODO - change back to json when fix bug with encryption
+        binary_object = download_binary_from_ipfs(ipfs_hash)
 
-        # decrypt downloaded video
-        binary_object = decrypt(encrypted_dict, smart_contract_info['public_key'])
+        # # decrypt downloaded video
+        # binary_object = decrypt(encrypted_dict, smart_contract_info['public_key'])  TODO: fix bug with enctryption. Video not plays after encrypt/decrypt
 
-        # check authenticity using signature
-        auth = verify_signature(hash_binary(binary_object),
-                                smart_contract_info['signature'],
-                                smart_contract_info['public_key'])
+        # # check authenticity using signature
+        # auth = verify_signature(hash_binary(binary_object), # TODO: fix bug with convert from string to Signature
+        #                         smart_contract_info['signature'],
+        #                         smart_contract_info['public_key'])
 
-        if not auth:
-            pass  # TODO: What to do if signature is not correct?
+        # if not auth:
+        #     pass  # TODO: What to do if signature is not correct?
 
         # get money from user account
         pay(smart_contract_info)
